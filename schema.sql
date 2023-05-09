@@ -1,0 +1,51 @@
+DROP TABLE IF EXISTS Cards_board;
+DROP TABLE IF EXISTS Card_order;
+DROP TABLE IF EXISTS Card;
+DROP TABLE IF EXISTS UserProjects;
+DROP TABLE IF EXISTS Project;
+DROP TABLE IF EXISTS User;
+
+CREATE TABLE IF NOT EXISTS User(
+	id CHAR(128) PRIMARY KEY,
+    username VARCHAR(256) NOT NULL,
+    password VARCHAR(256) NOT NULL,
+    role VARCHAR(32) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Project(
+	id CHAR(128) PRIMARY KEY,
+    name VARCHAR(256) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS UserProjects(
+	id CHAR(128) PRIMARY KEY,
+	user_id CHAR(128) NOT NULL,
+    project_id CHAR(128) NOT NULL,
+    project_role VARCHAR(32) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES User(id),
+    FOREIGN KEY (project_id) REFERENCES Project(id)
+);
+
+CREATE TABLE IF NOT EXISTS Card(
+	id CHAR(128) PRIMARY KEY,
+    top_content VARCHAR(256) NOT NULL,
+    inside_content VARCHAR(2048) NOT NULL,
+	category VARCHAR(32) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Cards_board(
+	id CHAR(128) PRIMARY KEY,
+    user_id CHAR(128) NOT NULL,
+    project_id CHAR(128) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES User(id),
+    FOREIGN KEY (project_id) REFERENCES Project(id)
+);
+
+CREATE TABLE IF NOT EXISTS Card_order(
+	id CHAR(128) PRIMARY KEY,
+	position TINYINT NOT NULL,
+    card_id CHAR(128) NOT NULL,
+    card_board_id CHAR(128) NOT NULL,
+    FOREIGN KEY (card_id) REFERENCES Card(id),
+    FOREIGN KEY (card_board_id) REFERENCES Cards_board(id)
+);
